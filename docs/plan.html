@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honeycomb Prototype V1 Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Mulish:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a working team plan in the Honeycomb document style. Dates first, then decisions, then the work. */
+:root {
+  --ink: #1D2330;
+  --ink-2: #3A4150;
+  --mute: #5D6470;
+  --rule: #DADDE3;
+  --shade: #F1F2F4;
+  --paper: #FFFFFF;
+  --honey: #F5B301;
+  --honey-soft: #FFF6DA;
+  --honey-ink: #7A5900;
+  --alert: #B42318;
+  --alert-soft: #FDECEA;
+  --on-honey: #1D2330;
+  --display: "Avenir Next Condensed", "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ui: "Avenir Next", "Mulish", "Segoe UI", sans-serif;
+  --body: Charter, "Source Serif 4", Georgia, serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #ECEEF2;
+    --ink-2: #C9CDD5;
+    --mute: #A2A8B3;
+    --rule: #39404E;
+    --shade: #232936;
+    --paper: #181C25;
+    --honey-soft: #33290F;
+    --honey-ink: #F5C84A;
+    --alert: #FF9C92;
+    --alert-soft: #3B1F1D;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #ECEEF2;
+  --ink-2: #C9CDD5;
+  --mute: #A2A8B3;
+  --rule: #39404E;
+  --shade: #232936;
+  --paper: #181C25;
+  --honey-soft: #33290F;
+  --honey-ink: #F5C84A;
+  --alert: #FF9C92;
+  --alert-soft: #3B1F1D;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.5; }
+main { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; display: grid; gap: 44px; }
+header { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: center; border-bottom: 3px solid var(--honey); padding-bottom: 20px; }
+header svg { width: 48px; height: 54px; grid-row: span 2; }
+h1 { font-family: var(--display); font-size: 40px; font-weight: 700; line-height: 1.05; text-wrap: balance; }
+.meta { font-family: var(--ui); font-size: 14px; color: var(--mute); }
+.lead { font-size: 20px; line-height: 1.45; max-width: 65ch; }
+section { display: grid; gap: 14px; }
+h2 { font-family: var(--display); font-size: 28px; font-weight: 700; line-height: 1.1; text-wrap: balance; }
+h3 { font-family: var(--ui); font-size: 17px; font-weight: 700; line-height: 1.3; }
+p { max-width: 65ch; }
+.small { font-family: var(--ui); font-size: 14px; color: var(--mute); }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.86em; background: var(--shade); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+a { color: var(--honey-ink); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--honey); outline-offset: 2px; }
+
+.dates { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.dates li { padding: 12px 14px; display: grid; gap: 4px; align-content: start; font-family: var(--ui); border-right: 1px solid var(--rule); }
+.dates li:last-child { border-right: 0; }
+.dates .when { font-size: 13px; font-weight: 700; color: var(--honey-ink); font-variant-numeric: tabular-nums; }
+.dates .what { font-size: 14px; line-height: 1.35; }
+.dates li.noai { background: var(--alert-soft); }
+.dates li.noai .when { color: var(--alert); }
+
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-family: var(--ui); font-size: 14.5px; line-height: 1.4; }
+th { text-align: left; font-weight: 700; background: var(--ink); color: var(--paper); padding: 8px 10px; vertical-align: bottom; }
+td { padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+td:first-child { font-weight: 700; min-width: 118px; }
+section > h3 { margin-top: 6px; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.scenario { border: 1px solid var(--rule); border-left: 5px solid var(--honey); border-radius: 4px; padding: 16px 18px; display: grid; gap: 10px; }
+.scenario .tag { font-family: var(--ui); font-size: 13px; color: var(--mute); }
+.scenario .result { font-family: var(--ui); font-size: 14px; background: var(--shade); padding: 9px 12px; border-radius: 4px; line-height: 1.4; }
+.scenario .result b { font-weight: 700; }
+.common { background: var(--honey-soft); border-radius: 4px; padding: 13px 16px; }
+.common p + p { margin-top: 6px; }
+
+ul.plain { list-style: disc; padding-left: 20px; display: grid; gap: 6px; font-family: var(--ui); font-size: 15px; line-height: 1.45; max-width: 72ch; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.two > div { display: grid; gap: 10px; align-content: start; }
+.callout { border-left: 5px solid var(--alert); background: var(--alert-soft); padding: 13px 16px; border-radius: 4px; font-family: var(--ui); font-size: 15px; line-height: 1.45; }
+.callout b { color: var(--alert); }
+footer { border-top: 1px solid var(--rule); padding-top: 14px; }
+
+@media (max-width: 760px) {
+  main { padding: 28px 16px 48px; gap: 36px; }
+  h1 { font-size: 33px; }
+  .lead { font-size: 18px; }
+  .dates { grid-template-columns: 1fr; }
+  .dates li { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .dates li:last-child { border-bottom: 0; }
+  .two { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <svg viewBox="0 0 48 54" role="img" aria-label="Honeycomb logo">
+    <polygon points="24,1 47,14 47,40 24,53 1,40 1,14" fill="#1D2330" stroke="#5D6470" stroke-width="1"/>
+    <polygon points="1,31 47,31 47,40 24,53 1,40" fill="#F5B301"/>
+  </svg>
+  <h1>Honeycomb Prototype V1 Plan</h1>
+  <p class="meta">Team A17 · CS 3803-DCA, Fall 2026 · Final plan, revised November 1, 2026</p>
+</header>
+
+<p class="lead">Team A17 will build a coded Honeycomb prototype with sample data, built around three task scenarios and hosted at a public link. V1 freezes Wednesday at 9:00 PM, the night before it is due and reviewed in class.</p>
+
+<p class="small">Live link: <a href="https://jays-hub.github.io/honeycomb-v1/">jays-hub.github.io/honeycomb-v1</a> · Repo: <a href="https://github.com/Jays-hub/honeycomb-v1">github.com/Jays-hub/honeycomb-v1</a></p>
+
+<section aria-labelledby="dates">
+  <h2 id="dates">Key times</h2>
+  <ul class="dates">
+    <li><span class="when">Wed 11/4, 9:00 PM</span><span class="what">V1 frozen (team deadline)</span></li>
+    <li><span class="when">Thu 11/5, by 11:00 AM</span><span class="what">Both PDFs on Canvas (hard deadline 12:30 PM)</span></li>
+    <li><span class="when">Thu 11/5, 12:30 PM</span><span class="what">All of A17 reviews A13's prototype</span></li>
+    <li><span class="when">Thu 11/5, 12:55 PM</span><span class="what">A13 reviews Honeycomb for 25 minutes</span></li>
+    <li class="noai"><span class="when">Fri 11/6, 11:59 PM</span><span class="what">Evaluation of A13 on Canvas. No AI allowed.</span></li>
+  </ul>
+</section>
+
+<section aria-labelledby="decisions">
+  <h2 id="decisions">Decisions</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Decision</th><th>Choice</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Prototype tool</td><td>Coded web app, built with Claude Code</td><td>The team agreed on this on Nov 1. The scenarios need real typing, re-ranking and progress updates. The repo gives the whole team access, so the work does not depend on one laptop. <code>A17-AIPolicy.pdf</code> is the team's whole AI policy. It sets no tool restrictions and defers to the course policy, so Claude Code fits it.</td></tr>
+      <tr><td>Stack</td><td>React, Vite, plain CSS, hash routes</td><td>A static site needs no server. Hash routes keep the URL working through refresh and the back button on GitHub Pages.</td></tr>
+      <tr><td>Saved state</td><td>Each scenario keeps its data in sessionStorage. Refresh keeps it. "Reset demo" or closing the tab clears it.</td><td>Hash routes save the URL, not the data. localStorage would hand one tester's run to the next person on that laptop.</td></tr>
+      <tr><td>Hosting</td><td>Public GitHub repo, <code>honeycomb-v1</code>, with GitHub Pages</td><td>Free public link, and the repo link meets the log's "available for TA verification" item. The repo holds no secrets or interview data.</td></tr>
+      <tr><td>Data</td><td>Fictional sample data; no real Canvas or Google connection. Values are tagged "From Canvas," "Est." or "Added by you."</td><td>The vision statement treats feed links as secrets. A "Use sample link" button means nobody pastes a real one. The Canvas feed carries only dated assignments and events, so imported tasks have no % until the student adds one.</td></tr>
+      <tr><td>Ranking</td><td>First, if everything can't fit in deadline order, move the lowest-weight task that can relieve it under a "Won't fit in time" line, and repeat until the rest fit. Tasks with no % never move; if that leaves an overload, the list says so. Then rank the rest by least spare time: free time until due, outside fixed blocks, minus effort. Ties go to course weight, then the cell order shown on the Cells screen. If that order would make a task late, use deadline order instead.</td><td>The lo-fi scenario is about limiting grade damage. Spare time alone can sink a 20% project to save a 1% post, or miss a deadline that deadline order would meet. Same-deadline work still goes longest first, as the user research found. V1 leaves out difficulty, late policy, class standing and sleep, and "How ranking works" says so.</td></tr>
+      <tr><td>Priority labels</td><td>The ranked list splits into thirds by rank: High, Medium, Low, rounding toward High. Anything under "Won't fit in time" is Low. Undated tasks have no label.</td><td>Four tasks read High, High, Medium, Low, the same pattern as the lo-fi, and a label can never contradict the order. % of grade appears separately.</td></tr>
+      <tr><td>Grade impact</td><td>Optional "% of course grade" field, never the student's score</td><td>Keeps the lo-fi scenario while honoring the vision statement's "never grades."</td></tr>
+      <tr><td>Adding a task</td><td>Title and cell, with due date, effort and weight under "More details"</td><td>Replaces the lo-fi's six fields. The vision statement caps required entry at a title and a cell.</td></tr>
+      <tr><td>Undated tasks and effort</td><td>Undated tasks go in a "No due date" group below the ranked list, with "Add a due date to rank this." Effort defaults by task type, tagged "Est."</td><td>Spare time can't be computed without a due date, and Scenario 3 creates such a task on purpose. The vision statement promises effort defaults by task type.</td></tr>
+      <tr><td>Home screen</td><td>"Do this next" card, then this week's ranked list. A line above the list shows work against time left when it doesn't fit. Rows show due time, expected time, % of grade and priority.</td><td>The user research asked for a plan that is always ready, and for everything visible as well as a priority list. The research report makes the weekly view the default. The rows carry the lo-fi priority list's information, so it needs no screen of its own.</td></tr>
+      <tr><td>Trust</td><td>"Why this first" on the card, with "How ranking works" behind it, plus a "Not now" action. "Not now" shows the next card, keeps the task in the list marked "Skipped," and can be undone.</td><td>The user research found that trust depends on the app matching a student's own priorities, and that students move between tasks by how they feel. The research report lists skipping as a task under Feature 2. "Why this first" cites only the factors that decided the order.</td></tr>
+      <tr><td>Demo clock</td><td>Starts at Sunday, Nov 8, 2026, 7:00 PM, shown in a banner with "Switch scenario" and "Reset demo." Marking a task done moves the clock forward by that task's effort, and undo moves it back. Weeks start on Sunday.</td><td>"Due tonight" stays true whenever a peer or grader opens it. A moving clock keeps tonight's overload true after the quiz is done; with a fixed clock it would vanish. A Monday-start week would leave only Sunday's last five hours in This week.</td></tr>
+      <tr><td>Due dates</td><td>The due-date field offers Tonight and Tomorrow, tied to the demo clock. A date before the demo time shows a red error. Documents give full dates.</td><td>A13 reviews on Nov 5, but the app says Nov 8. "Friday" alone reads as Nov 6, and a native date picker highlights the real today. Either one makes a task overdue.</td></tr>
+      <tr><td>Start page</td><td>The main link opens a "Prototype menu" with one start button per scenario, each loading its own sample data</td><td>A stuck evaluator can move on inside the 25 minutes, and a grader can run any scenario alone. Calling it a menu keeps it from reading as a product screen.</td></tr>
+      <tr><td>Log in</td><td>Demo credentials are prefilled, an on-screen note says not to use a real password, and the button reads "Log in or create account." The simulated Google step is a plain Honeycomb card.</td><td>Scenario 2's user is new. A public page with a password field should not invite a real password or look like Google's sign-in.</td></tr>
+      <tr><td>V1 freeze</td><td><code>main</code> deploys until the freeze. At the freeze, set the repo's <code>FROZEN</code> variable and push tag <code>v1.0</code>; after that only <code>v1.*</code> tags deploy. V2 gets a separate repo and link.</td><td>The assignment bans changes to the V1 link until it is graded. A tag alone does not control what Pages serves, and V2 on the same site would redeploy V1. Until Thursday's submission, a fix gets a new tag and a log entry. After that, nothing changes.</td></tr>
+      <tr><td>PM check-in</td><td>Graded, and still to be held. The PM was messaged on Nov 1. Hold it at the PM's first open time, and send the link Monday night.</td><td>The check-in is graded even though PM feedback on the prototype is optional. A timed test with a student outside the team runs either way, because a PM reply may come too late to act on.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section aria-labelledby="scenarios">
+  <h2 id="scenarios">Task scenarios</h2>
+  <p>This is the wording for the no-guide document. The guide version adds the expected result, the numbered steps written against the final button labels, and one line on how the prototype implements the scenario, which the rubric's "fully explained" asks for. Together they cover all four features in the research report, and Scenario 3 shows school and the rest of life ranked together. Scenario 1 is the lo-fi scenario, as the Day 17 slides ask.</p>
+
+  <div class="common">
+    <p><b>Opening text for both documents:</b> Honeycomb is a free web app for Georgia Tech undergraduates. It imports Canvas deadlines and Google Calendar, takes quick entries for everything else, and ranks it all into one "Do this next" card. This prototype uses sample data, so do not enter real links or passwords. Log in with the details already filled in.</p>
+  </div>
+
+  <article class="scenario">
+    <h3>Scenario 1: Tonight's deadlines</h3>
+    <p class="tag">Heavy course load. Covers quick-add, the "Do this next" card and skipping.</p>
+    <p>It is 7:00 PM on Sunday, Nov 8. You have several deadlines tonight and may not finish them all, so you want to protect your grades. You just remembered a HIST 2111 Reading Quiz that is not in the app yet. It is due tonight at 9:00 PM, should take about 45 minutes, and is worth 3% of your course grade.</p>
+    <p>Log in and add the quiz. Find out which task to start first and why it ranks first. Find out how long the task after it should take, and which task would cost you the least if you run out of time. Then pretend you finished the top task and mark it done. You aren't up for the task that comes next, so skip it for now and see what the card suggests instead.</p>
+    <p class="result"><b>Expected result (guide version only):</b> Before the quiz, tonight's 4h 30m of work fits in the 4h 59m left. After it, the list shows 5h 15m of work against 4h 59m left, and ECON 2100 Discussion Post (1%) drops under "Won't fit in time." The quiz moves to the top with 1h 15m to spare. PHYS 2212 Lab Report 7 is next, at 2h 15m. Marking the quiz done moves the clock to 7:45 PM and brings up the lab report. Skipping it brings up CS 1332 Homework 6, and the lab report stays in the list marked "Skipped."</p>
+  </article>
+
+  <article class="scenario">
+    <h3>Scenario 2: First-time setup and a wrong date</h3>
+    <p class="tag">First-year student. Covers import and editing a due date.</p>
+    <p>It is Sunday, Nov 8. You are a first-year student opening Honeycomb for the first time. Your classes are in Google Calendar, your deadlines are in Canvas, and you do not want to type assignments in by hand.</p>
+    <p>Log in and connect your Canvas calendar feed and Google Calendar using the sample data provided. Your instructor just moved MATH 1554 Homework 9 to Friday, Nov 13 at 11:59 PM, but Canvas still shows Wednesday, Nov 11. Correct the date in Honeycomb and confirm that the new date appears and the homework moves in your ranked list.</p>
+    <p class="result"><b>Expected result (guide version only):</b> Imported tasks appear in one ranked list, tagged "From Canvas," with no % until the student adds one. The homework shows the new date, marked "Changed by you," with "Restore Canvas date." It moves from second to fourth. A bad feed link shows a red error that says how to fix it; no step reaches it, so the guide says where to see it.</p>
+  </article>
+
+  <article class="scenario">
+    <h3>Scenario 3: Balancing the week</h3>
+    <p class="tag">Club member with a job. Covers the weekly view, cells with progress, and club and class work ranked together.</p>
+    <p>It is 7:00 PM on Sunday, Nov 8. You are in the robotics club and work shifts at the campus recreation center. You want to see where your whole week stands, including everything outside of class.</p>
+    <p>Open your week and find your next work shift. See what Honeycomb says to do next, and why. Check how many Clubs tasks are done. Add a task called "Book room for robotics meeting" to Clubs using only a title. Then mark "Order motor parts" done and confirm that the Clubs progress count changes.</p>
+    <p class="result"><b>Expected result (guide version only):</b> The week shows tasks and fixed blocks by day, starting Sunday, with Next week and Week after tabs. The card shows "Order motor parts" from Clubs ahead of a class task, because it has less spare time. The new task lands in Clubs under "No due date." The Clubs count reads 2 of 4 done, then 2 of 5, then 3 of 5.</p>
+  </article>
+
+  <p class="small">Target: under 5 minutes per scenario on a first try, so all three fit in the 25-minute review along with heuristic notes. The outside test uses this as its pass bar.</p>
+</section>
+
+<section aria-labelledby="build">
+  <h2 id="build">What gets built</h2>
+  <div class="two">
+    <div>
+      <h3>Screens</h3>
+      <ul class="plain">
+        <li>Prototype menu</li>
+        <li>Log in (prefilled demo credentials, working show-password toggle)</li>
+        <li>Connect Canvas and Google Calendar (simulated, with "Where do I find my Canvas feed link?")</li>
+        <li>Home: card, work against time left, ranked list, "Won't fit in time" and "No due date" groups</li>
+        <li>Why this first, with "How ranking works"</li>
+        <li>Add and edit task, with "Restore Canvas date"</li>
+        <li>Week: tasks and fixed blocks, with This week, Next week and Week after</li>
+        <li>Cells overview, showing the cell order, and cell detail</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Rules for every screen</h3>
+      <ul class="plain">
+        <li>Every visible control works. If it isn't wired up, it doesn't appear.</li>
+        <li>Every screen has a way back. Marking done, skipping and editing a date can all be undone.</li>
+        <li>Actions show a confirmation. Errors are red and say how to fix them.</li>
+        <li>Progress appears in text. Controls have a visible keyboard focus in ink, because honey on white is only 1.85:1, below WCAG's 3:1 for focus indicators.</li>
+        <li>Text meets 4.5:1 contrast. The vision statement's gold (#A87A00) reaches only 3.85:1 on white, so small text uses a darker shade.</li>
+        <li>It works at phone and laptop widths. Enter saves a form and Esc closes it.</li>
+      </ul>
+      <h3>Left out of V1</h3>
+      <ul class="plain">
+        <li>Plan chat, which the research report defers</li>
+        <li>Real imports and real sign-in</li>
+        <li>Reordering cells and late-policy rules</li>
+        <li>Notifications, settings and password reset</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Scenario 1 sample data</h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Task</th><th>Due tonight</th><th>Effort</th><th>% of grade</th></tr></thead>
+    <tbody>
+      <tr><td>HIST 2111 Reading Quiz (the evaluator adds this)</td><td class="num">9:00 PM</td><td class="num">45m</td><td class="num">3%</td></tr>
+      <tr><td>PHYS 2212 Lab Report 7</td><td class="num">11:59 PM</td><td class="num">2h 15m</td><td class="num">10%</td></tr>
+      <tr><td>CS 1332 Homework 6</td><td class="num">11:59 PM</td><td class="num">1h 15m</td><td class="num">4%</td></tr>
+      <tr><td>INTA 1200 Reading Response</td><td class="num">11:59 PM</td><td class="num">35m</td><td class="num">2%</td></tr>
+      <tr><td>ECON 2100 Discussion Post</td><td class="num">11:59 PM</td><td class="num">25m</td><td class="num">1%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">These numbers produce Scenario 1's expected result, and tests lock them in. The night runs over by 16 minutes, so ECON must stay the cheapest task and take at least 16 minutes, or skipping it doesn't save the night. Scenario 2 needs two tasks between the homework's old and new dates. Scenario 3 needs a dated Clubs task above a class task, and a shift that cuts into a task's free time. Sample data avoids details from the interview notes.</p>
+</section>
+
+<section aria-labelledby="schedule">
+  <h2 id="schedule">Schedule</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>When</th><th>Work</th><th>Done when</th></tr></thead>
+    <tbody>
+      <tr><td>Sun 11/1</td><td>Done: plan shared, PM messaged, AI policy confirmed, coded build agreed. Still tonight: publish the repo, deploy the first page, add teammates, claim roles, start the AI log.</td><td>The public link opens in a private window.</td></tr>
+      <tr><td>Mon 11/2</td><td>Write the ranking rules, sample data and tests first. Build Scenario 1, then 2 and 3. Script Scenario 1. Name the outside tester, who can't be from A13. Send the PM the link.</td><td>All three scenarios work at the public link.</td></tr>
+      <tr><td>Tue 11/3 (Day 19)</td><td>Each member runs all three scenarios and files GitHub issues. Outside test in the evening, using only the no-guide document, and ask the tester what "cell" means. A second member builds and deploys from a clean clone. Freeze button labels at 9:00 PM, then draft the guides. Get the heuristic template and assign the 12:30 roles.</td><td>Every issue is marked fix or leave, and the guides are drafted.</td></tr>
+      <tr><td>Wed 11/4</td><td>Fixes only. A failed outside test changes the screen, not the document. Script Scenarios 2 and 3. Final guides by 5:00 PM, then both PDFs from one source and the log. Click every control and test the backup laptop. Freeze by 9:00 PM.</td><td><code>v1.0</code> tagged, no scenario-blocking issues.</td></tr>
+      <tr><td>Thu 11/5</td><td>Recheck the link on laptop and phone in a private window. Submit by 11:00 AM. Print two no-guide copies. Start the evaluation of A13 right after class.</td><td>Canvas shows both files.</td></tr>
+      <tr><td>Fri 11/6</td><td>The team finishes the evaluation of A13 without AI and submits it.</td><td>Canvas shows the <code>.docx</code>.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">The PM check-in happens at the PM's first open time, whichever day that is. If Scenario 1 is not at the public link by Tuesday noon, cut in this order: Next week and Week after content, the by-day layout (use a plain list), the "Why" page (use inline text). 65 of 100 points are documents and availability, so the guides do not wait for the last fix.</p>
+</section>
+
+<section aria-labelledby="roles">
+  <h2 id="roles">Roles</h2>
+  <p>Joseph Townsend leads the build. Claim the other five in the group chat by noon Monday.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Role</th><th>Owns</th></tr></thead>
+    <tbody>
+      <tr><td>Build lead</td><td>Repo, Claude Code sessions, deployment, V1 freeze</td></tr>
+      <tr><td>Code reviewer</td><td>Reads the generated code, checks AI tags, writes and runs the scripted scenario tests, builds from a clean clone by Tuesday</td></tr>
+      <tr><td>Scenario docs</td><td>Both document versions, guides, prototype link and QR code in the body of each</td></tr>
+      <tr><td>Test lead</td><td>Tuesday team run, outside test, control-by-control check. Then the evaluation of A13: 12:30 roles, template, draft and <code>.docx</code> upload</td></tr>
+      <tr><td>AI log and Canvas</td><td>Keeps the log current, uploads both PDFs with the exact file names, books the graded PM check-in</td></tr>
+      <tr><td>Day 20 host</td><td>Introduction, printed copies, PDF sent to A13, backup laptop (a built copy running locally plus a phone hotspot), notes during A13's review</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section aria-labelledby="deliverables">
+  <h2 id="deliverables">Deliverables and points</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Item</th><th>Where it goes</th><th>Points</th></tr></thead>
+    <tbody>
+      <tr><td><code>TeamA17-HiFiPrototypeV1.pdf</code></td><td>Canvas. Three scenarios, fully explained, with guides and the prototype link.</td><td class="num">45</td></tr>
+      <tr><td>No-guide scenario document</td><td>Given to A13 in class, with the prototype link. Not uploaded to Canvas.</td><td class="num">10</td></tr>
+      <tr><td>Prototype available in class</td><td>Public link, with the team laptop as backup.</td><td class="num">10</td></tr>
+      <tr><td>Prototype quality</td><td>Tasks complete (15), realistic flows (10), responsive elements (10).</td><td class="num">35</td></tr>
+      <tr><td><code>TeamA17-AIToolLog_PrototypeV1.pdf</code></td><td>Canvas. Required, with no rubric points.</td><td class="num">0</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">The evaluation of A13, <code>TeamA17-Evaluation-of-TeamA13.docx</code>, is a separate assignment worth 25 points. PM Check-in Meeting #2 is graded separately too.</p>
+</section>
+
+<section aria-labelledby="day20">
+  <h2 id="day20">Day 20 in class</h2>
+  <div class="two">
+    <div>
+      <h3>12:30 PM: A17 reviews A13</h3>
+      <ul class="plain">
+        <li>All members attend.</li>
+        <li>The member the test lead named performs A13's tasks.</li>
+        <li>The member the test lead named records observations in a copy of the heuristic template.</li>
+        <li>Note where anyone gets stuck and why.</li>
+        <li>Start the written evaluation right after class.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>12:55 PM: A13 reviews Honeycomb</h3>
+      <ul class="plain">
+        <li>Open with: "Honeycomb ranks a Georgia Tech student's school, club, job and personal tasks into one 'Do this next' card, for undergraduates whose work is scattered across tools and who want a plan ready."</li>
+        <li>Give A13 the link and the no-guide document, printed with a QR code and sent as a PDF.</li>
+        <li>Answer technical and clarifying questions only. Never say what to click.</li>
+        <li>Take notes for V2. If time allows, ask: "Was anything confusing or unexpected?"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="ai">
+  <h2 id="ai">AI rules and log</h2>
+  <div class="callout"><b>The evaluation of A13 is no-AI.</b> The assignment says "You are not permitted to use AI." Do not put A13's prototype, the team's notes or the draft into any AI tool, including for cleanup. Turn off Copilot, Gemini or similar in whatever editor holds the file.</div>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Log section</th><th>Starting entry</th></tr></thead>
+    <tbody>
+      <tr><td>Tool and model</td><td>Claude Opus 5.5 through the Claude Code CLI. Add a row for any other tool or model.</td></tr>
+      <tr><td>Tasks</td><td>Assignment review, this plan and its adversarial review, scenario drafts, prototype code, document layout.</td></tr>
+      <tr><td>Rationale</td><td>Works directly with files and git, so its output is versioned and testable. A coded build supports real typing and re-ranking, compared with Figma Design or Figma Make.</td></tr>
+      <tr><td>Limitations and mitigation</td><td>Generated code can look right and still fail on paths nobody clicked. Mitigated by a scripted run of all three scenarios, a click-through by each member and an outside test.</td></tr>
+      <tr><td>Pivot log</td><td>No pivots so far. Record any switch when it happens.</td></tr>
+      <tr><td>Data privacy</td><td>Interview material was given to Claude for design context. The full entry is in the team's shared copy of this plan. Decide as a team whether to check the box, say what the entry says next to it, and keep notes and recordings out of the repo.</td></tr>
+      <tr><td>Attribution</td><td>A header comment on generated source files, a README section and a commit trailer. A tag line on generated document text. A credit line on the Prototype menu covers generated layouts.</td></tr>
+      <tr><td>Artifact retention</td><td>Repo and issue links go in the log.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section aria-labelledby="open">
+  <h2 id="open">Open items</h2>
+  <ul class="plain">
+    <li><b>Research report:</b> One date and location line in Appendix C needs checking before the UX report reuses it. The details are in the team's shared copy of this plan.</li>
+    <li><b>After V1:</b> A13's evaluation of Honeycomb is due back by the end of Tuesday 11/10 (tentative). V2 and the UX report are due at the end of Friday 12/4.</li>
+  </ul>
+</section>
+
+<footer>
+  <p class="small">Drafted with Claude Code (Claude Opus 5.5) from the assignment page, rubric, peer evaluation page, Day 17 slides, lo-fi prototype, updated research report, vision statement, team AI policy and AI log template. Revised after an adversarial review on November 1, 2026. This public repo copy generalizes a few lines drawn from the interviews; the team's shared copy has them in full.</p>
+</footer>
+
+</main>
+</body>
+</html>

@@ -17,6 +17,11 @@ npm run build    # production build in dist/
 npm run preview  # serve the build locally, used for the backup laptop
 ```
 
+## Work on it with Claude Code
+
+Run `claude` in this folder. `CLAUDE.md` loads automatically and points to the plan, build notes and
+assignment summary in `docs/`.
+
 ## Deploy
 
 Every push to `main` deploys to GitHub Pages until the V1 freeze.

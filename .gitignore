@@ -26,3 +26,7 @@ dist-ssr
 # Research material stays out of this public repo
 *.m4a
 *Interview*
+
+# Personal Claude Code settings
+.claude/settings.local.json
+CLAUDE.local.md
