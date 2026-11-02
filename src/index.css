@@ -1,0 +1,55 @@
+/* Generated with Claude Code (Claude Opus 5.5) for Team A17, CS 3803. */
+:root {
+  --ink: #1d2330;
+  --mute: #5d6470;
+  --paper: #ffffff;
+  --honey: #f5b301;
+  --honey-ink: #7a5900;
+  --ui: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.5 var(--ui);
+}
+
+main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+}
+
+.logo {
+  width: 48px;
+  height: 54px;
+}
+
+h1 {
+  margin: 0.75rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--honey);
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+a {
+  color: var(--honey-ink);
+}
+
+/* Honey on white is 1.85:1, so focus rings use ink. */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+footer {
+  margin-top: 2.5rem;
+  color: var(--mute);
+  font-size: 0.875rem;
+}
