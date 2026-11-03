@@ -1,5 +1,5 @@
 // Generated with Claude Code (Claude Opus 5.5) for Team A17, CS 3803.
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, Navigate, NavLink, Outlet, Route, Routes, useLocation, useNavigate, useParams } from 'react-router'
 import { SCENARIOS } from './data/scenarios.js'
 import { ScenarioContext, useScenario } from './lib/ScenarioContext.js'
@@ -52,9 +52,10 @@ function Toast() {
 }
 
 function Shell({ onReset }) {
-  const [state] = useScenario()
-  const { pathname } = useLocation()
+  const [state, update] = useScenario()
+  const { pathname, state: nav } = useLocation()
   const navigate = useNavigate()
+  const lastPath = useRef(pathname)
 
   // Each new screen starts at the top, with focus on its heading.
   useEffect(() => {
@@ -66,9 +67,17 @@ function Shell({ onReset }) {
     }
   }, [pathname])
 
+  // A confirmation belongs to the screen it appears on, so leaving that screen clears it.
+  // keepToast marks the move that carries a new confirmation to the screen it reports on.
+  useEffect(() => {
+    if (lastPath.current === pathname) return
+    lastPath.current = pathname
+    if (!nav?.keepToast) update(dismissToast)
+  }, [pathname, nav, update])
+
   const reset = () => {
     onReset()
-    navigate(`/${state.id}/login`)
+    navigate(`/${state.id}/login`, { replace: true, state: { keepToast: true } })
   }
 
   const base = `/${state.id}`
@@ -131,7 +140,7 @@ function ScenarioProvider({ id }) {
 
 function RequireLogin() {
   const [state] = useScenario()
-  return state.loggedIn ? <Outlet /> : <Navigate to={`/${state.id}/login`} replace />
+  return state.loggedIn ? <Outlet /> : <Navigate to={`/${state.id}/login`} replace state={{ keepToast: true }} />
 }
 
 export default function App() {

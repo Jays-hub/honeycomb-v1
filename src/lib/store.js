@@ -25,14 +25,20 @@ export function initialState(id) {
 export function load(id) {
   try {
     const saved = sessionStorage.getItem(key(id))
-    return saved ? JSON.parse(saved) : initialState(id)
+    return saved ? { ...JSON.parse(saved), toast: null } : initialState(id)
   } catch {
     return initialState(id)
   }
 }
 
 export const save = (state) => sessionStorage.setItem(key(state.id), JSON.stringify(state))
-export const hasStarted = (id) => sessionStorage.getItem(key(id)) != null
+export const hasStarted = (id) => {
+  try {
+    return JSON.parse(sessionStorage.getItem(key(id)))?.loggedIn === true
+  } catch {
+    return false
+  }
+}
 export const clear = (id) => sessionStorage.removeItem(key(id))
 
 const EFFORT_BY_TYPE = [
@@ -187,7 +193,8 @@ export function restoreCanvasDate(state, id) {
 
 export function connectCanvas(state) {
   const fresh = SCENARIO_2_IMPORT.filter((t) => !state.tasks.some((other) => other.id === t.id))
-  return { ...state, canvas: true, tasks: [...state.tasks, ...fresh] }
+  // An earlier Undo can't reach the import, so its confirmation goes too.
+  return { ...state, canvas: true, tasks: [...state.tasks, ...fresh], toast: null }
 }
 
-export const connectGoogle = (state) => ({ ...state, google: true, blocks: SCENARIO_2_BLOCKS })
+export const connectGoogle = (state) => ({ ...state, google: true, blocks: SCENARIO_2_BLOCKS, toast: null })

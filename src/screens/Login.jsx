@@ -31,7 +31,7 @@ export default function Login() {
       return
     }
     update(logIn)
-    navigate(homePathAfterLogin(state))
+    navigate(homePathAfterLogin(state), { replace: true })
   }
 
   return (

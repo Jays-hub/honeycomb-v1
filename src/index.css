@@ -275,16 +275,34 @@ nav a.active {
   display: none;
 }
 
+/* Stays in view wherever the page is scrolled, with room left so it can't hide the last row. */
+.toast-region {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 0.75rem 0.75rem;
+}
+
+main:has(.toast) {
+  padding-bottom: 11rem;
+}
+
 .toast {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
   padding: 0.625rem 0.875rem;
   background: var(--shade);
-  border-left: 4px solid var(--ink);
+  border: 1px solid var(--ink);
+  border-left-width: 4px;
+  box-shadow: 0 2px 8px rgb(29 35 48 / 25%);
 }
 
 .toast p {

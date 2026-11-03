@@ -60,6 +60,11 @@ export default function TaskForm() {
     if (!time) setTime(END_OF_DAY)
   }
 
+  const chooseSelectedDay = (value) => {
+    setDay(value)
+    if (!value) setTime('')
+  }
+
   const submit = (event) => {
     event.preventDefault()
     const found = {}
@@ -87,7 +92,7 @@ export default function TaskForm() {
     const form = { title: title.trim(), cell, due, effort: minutes, pct: weight }
     if (task) update(editTask, task.id, form)
     else update(addTask, form)
-    navigate(backTo)
+    navigate(backTo, { state: { keepToast: true } })
   }
 
   const fieldError = (name) =>
@@ -135,7 +140,7 @@ export default function TaskForm() {
             <div className="due-fields">
               <label className="field">
                 <span>Day</span>
-                <select value={day} aria-invalid={Boolean(errors.due)} onChange={(e) => setDay(e.target.value)}>
+                <select value={day} aria-invalid={Boolean(errors.due)} onChange={(e) => chooseSelectedDay(e.target.value)}>
                   <option value="">No due date</option>
                   {days.map((d) => (
                     <option key={d} value={d}>
@@ -156,7 +161,7 @@ export default function TaskForm() {
                 <button
                   type="button"
                   className="btn btn-small"
-                  onClick={() => { update(restoreCanvasDate, task.id); navigate(backTo) }}
+                  onClick={() => { update(restoreCanvasDate, task.id); navigate(backTo, { state: { keepToast: true } }) }}
                 >
                   Restore Canvas date
                 </button>

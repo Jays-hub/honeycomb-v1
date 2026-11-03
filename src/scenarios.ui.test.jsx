@@ -132,6 +132,58 @@ describe('Scenario 1', () => {
   })
 })
 
+describe('Confirmations and history', () => {
+  it('clears a confirmation on leaving its screen, but carries a new one back from the form', async () => {
+    await start(1)
+    await addQuiz()
+    expect(screen.getByText(/Added HIST 2111 Reading Quiz/)).toBeTruthy()
+    await clickLink('Week')
+    expect(screen.queryByText(/Added HIST 2111 Reading Quiz/)).toBeNull()
+  })
+
+  it('does not let an old Undo remove imported Canvas tasks', async () => {
+    await start(2)
+    await clickLink('Go to Home')
+    await clickLink('Add task')
+    await user.type(screen.getByLabelText('Title'), 'Pack bag')
+    await click('Save task')
+    expect(button('Undo')).toBeTruthy()
+    await clickLink('Connect Canvas and Google Calendar')
+    expect(screen.queryByRole('button', { name: 'Undo' })).toBeNull()
+    await click('Use sample link')
+    await click('Connect Canvas')
+    await clickLink('Go to Home')
+    expect(listTitles()).toContain('MATH 1554 Homework 9')
+  })
+
+  it('shows Demo reset. on login only, and offers Start again on the menu', async () => {
+    await start(1)
+    await click('Reset demo')
+    expect(screen.getByText('Demo reset.')).toBeTruthy()
+    await clickLink('Switch scenario')
+    expect(link('Start Scenario 1')).toBeTruthy()
+    await clickLink('Start Scenario 1')
+    await click('Log in or create account')
+    expect(screen.queryByText('Demo reset.')).toBeNull()
+  })
+
+  it('goes from Home back to the menu in one press', async () => {
+    await start(1)
+    window.history.back()
+    expect(await screen.findByRole('heading', { name: 'Prototype menu' })).toBeTruthy()
+  })
+
+  it('removes a due date by choosing No due date alone', async () => {
+    await start(1)
+    await clickLink('PHYS 2212 Lab Report 7')
+    await user.selectOptions(screen.getByLabelText('Day'), 'No due date')
+    expect(screen.getByLabelText('Time').value).toBe('')
+    await click('Save task')
+    expect(screen.queryByRole('alert')).toBeNull()
+    expect(screen.getByRole('heading', { name: /No due date/ })).toBeTruthy()
+  })
+})
+
 describe('Scenario 2', () => {
   it('connects both feeds, corrects the date and restores it', async () => {
     await start(2)
