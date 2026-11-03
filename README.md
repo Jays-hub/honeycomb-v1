@@ -15,6 +15,7 @@ npm ci
 npm run dev      # local development
 npm run build    # production build in dist/
 npm run preview  # serve the build locally, used for the backup laptop
+npm test         # ranking rules and the scripted run of all three scenarios
 ```
 
 ## Work on it with Claude Code

@@ -27,7 +27,7 @@ npm install -g @anthropic-ai/claude-code   # skip if already installed
 claude
 ```
 
-Commands: `npm run dev`, `npm run build`, `npm run preview`, `npm run lint`.
+Commands: `npm run dev`, `npm run build`, `npm run preview`, `npm run lint`, `npm test`.
 
 ## Hard rules
 
@@ -62,5 +62,7 @@ Commands: `npm run dev`, `npm run build`, `npm run preview`, `npm run lint`.
 
 ## Current state
 
-The repo has the scaffold and a placeholder Prototype menu. Nothing from the scenarios is built yet.
-Test tooling isn't installed. Check `git log` and `docs/plan.html` for what comes next.
+All three scenarios are built, with ranking in `src/lib/rank.js`, sample data in
+`src/data/scenarios.js`, and screens in `src/screens/`. `npm test` runs the required ranking cases and
+the scripted run of all three scenarios through the UI. Check `git log` and `docs/plan.html` for what
+comes next.
